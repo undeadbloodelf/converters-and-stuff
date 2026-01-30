@@ -1,0 +1,28 @@
+import logging
+logging.basicConfig(level=logging.DEBUG)
+import yt_dlp
+
+def download_video_with_ytdlp(url, destination='.'):
+    ydl_opts = {
+        'format': 'best',  # Automatically select the best video quality
+        'outtmpl': f'{destination}/%(title)s.%(ext)s'  # Save to destination folder with title
+    }
+
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+            info_dict = ydl.extract_info(url, download=False)
+            video_title = info_dict.get('title', None)
+            print(f"Downloaded video: {video_title}")
+    except Exception as e:
+        print(f"Error downloading video: {str(e)}")
+
+def main():
+    url = input("Enter the URL of the YouTube video you want to download:\n")
+    destination = input("Enter the destination directory to save the video file (leave blank for current directory):\n") or '.'
+
+    download_video_with_ytdlp(url, destination)
+
+if __name__ == "__main__":
+    main()
+
