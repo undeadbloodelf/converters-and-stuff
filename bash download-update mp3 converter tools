@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Update yt-dlp
+echo "Updating yt-dlp..."
+pip install --upgrade yt-dlp
+if [ $? -eq 0 ]; then
+    echo "yt-dlp updated successfully!"
+else
+    echo "Failed to update yt-dlp!"
+fi
+
+# Update FFmpeg (Linux only)
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Updating FFmpeg..."
+    sudo apt update && sudo apt install -y ffmpeg
+    if [ $? -eq 0 ]; then
+        echo "FFmpeg updated successfully!"
+    else
+        echo "Failed to update FFmpeg!"
+    fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Updating FFmpeg on macOS..."
+    brew update && brew upgrade ffmpeg
+    if [ $? -eq 0 ]; then
+        echo "FFmpeg updated successfully!"
+    else
+        echo "Failed to update FFmpeg!"
+    fi
+else
+    echo "FFmpeg update not automated on this OS. Please update it manually."
+fi
+
+# Update system packages (Linux)
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Updating system packages..."
+    sudo apt update && sudo apt upgrade -y
+    if [ $? -eq 0 ]; then
+        echo "System packages updated successfully!"
+    else
+        echo "Failed to update system packages!"
+    fi
+fi
+
+# Check versions
+echo -e "\nCurrent Versions:"
+echo -n "yt-dlp: "; yt-dlp --version
+echo -n "FFmpeg: "; ffmpeg -version | head -n 1
+
+echo -e "\nAll tools are up-to-date!"
